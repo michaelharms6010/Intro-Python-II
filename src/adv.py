@@ -1,5 +1,5 @@
 from room import Room
-
+from player import Player
 # Declare all the rooms
 
 room = {
@@ -49,3 +49,37 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+
+player = Player("Nereid", room["outside"])
+move = ""
+while move != "q":
+    
+    print(f"You are in the {player.current_room.area}")
+    print(f"{player.current_room.description}")
+
+    move = input("~~> ")
+    if move =="n":
+        if player.current_room.n_to is not None:
+            player.current_room = player.current_room.n_to
+        else:
+            print ("There is nothing in that direction.")
+    elif move == "s":
+        if player.current_room.s_to is not None:
+            player.current_room = player.current_room.s_to
+        else:
+            print ("There is nothing in that direction.")
+    elif move == "e":
+        if player.current_room.e_to is not None:
+            player.current_room = player.current_room.e_to
+        else:
+            print ("There is nothing in that direction.")
+    elif move == "w":
+        if player.current_room.w_to is not None:
+            player.current_room = player.current_room.w_to
+        else:
+            print ("There is nothing in that direction.")
+    elif move == "q":
+        print("gg wp")
+        exit()
+    else:
+        print("Valid moves are n,s,e, or w")
