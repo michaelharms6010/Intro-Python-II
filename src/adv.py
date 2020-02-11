@@ -1,11 +1,12 @@
 from room import Room
 from player import Player
 from item import Item
+import random
 # Declare all the rooms
 
 room = {
     'outside':  Room("Outside Cave Entrance",
-                     "North of you, the cave mount beckons", [Item("Holy Locket", "A healing charm"), Item("Tribal Drum", "A tribal drum"), Item("Helm of the Dominator", "A powerful helmet that gives the ability to control minds")]),
+                     "North of you, the cave mount beckons", [Item("Butterfly", "A friendly companion"), Item("Tribal Drum", "A tribal drum"), Item("Helm of the Dominator", "A powerful helmet that gives the ability to control minds")]),
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
 passages run north and east.""", []),
@@ -19,24 +20,54 @@ to north. The smell of gold permeates the air.""", []),
 
     'treasure': Room("Treasure Chamber", """You've found the long-lost treasure
 chamber! Sadly, it has already been completely emptied by
-earlier adventurers. The only exit is to the south.""", []),
+earlier adventurers. The only exit is to the south.""", [Item("Holy Locket", "A healing charm")]),
+    'mirrors':    Room("Hall of Mirrors", """Thousands of mirrors surround you. You instantly lose your bearings You have no sense of direction.""", []),
 }
 
 
 # Link rooms together
 
+mirror_exits = ["foyer", "outside", "treasure"]
+
 room['outside'].n_to = room['foyer']
 room['foyer'].s_to = room['outside']
-room['foyer'].n_to = room['overlook']
+room['foyer'].n_to = room['mirrors']
 room['foyer'].e_to = room['narrow']
-room['overlook'].s_to = room['foyer']
+room['overlook'].s_to = room['mirrors']
 room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
+room["mirrors"].s_to= room[random.choice(mirror_exits)]
+room["mirrors"].n_to= room[random.choice(mirror_exits)]
+room["mirrors"].e_to= room[random.choice(mirror_exits)]
+room["mirrors"].w_to= room[random.choice(mirror_exits)]
+
 
 player = Player("Nereid", room["outside"])
 move = ""
 while move != "q":
+
+    if room["overlook"].hasItem("Butterfly"):
+        print("""You free the butterfly on the other side of the foul castle. 
+As you watch it flit and flutter into the distance, you realize that life is too beautiful to spend it crawling in dungeons. 
+By your great wisdom, you have won the game.""")
+        exit()
+    
+    if player.current_room.area == "Grand Overlook" and player.hasItem("Butterfly"):
+            print("You hear a tiny voice within your pocket say 'This is my home! Free me!'")
+
+    if player.current_room == room["mirrors"]:
+        if player.hasItem("Holy Locket"):
+            print("The Holy Locket has blessed you with acute sight! The illusions of the mirrors have no effect on you.")
+            room["mirrors"].s_to= room["foyer"]
+            room["mirrors"].n_to= room["overlook"]
+            room["mirrors"].e_to= room["treasure"]
+            room["mirrors"].w_to= None
+        else:
+            room["mirrors"].s_to= room[random.choice(mirror_exits)]
+            room["mirrors"].n_to= room[random.choice(mirror_exits)]
+            room["mirrors"].e_to= room[random.choice(mirror_exits)]
+            room["mirrors"].w_to= room[random.choice(mirror_exits)]
     
     print(f"You are in the {player.current_room.area}")
     print(f"You see {player.current_room.getItems()} laying around")
