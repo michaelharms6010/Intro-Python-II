@@ -45,9 +45,13 @@ while move != "q":
     move = input("~~> ")
 
     if len(move.split()) > 1:
-        print (move.split())
         if move.split()[0] == "take" or move.split()[0] == "get":
             player.take(" ".join(move.split()[1:]))
+        if move.split()[0] == "drop":
+            player.drop(" ".join(move.split()[1:]))
+    elif move =="i":
+        print(player.getInventory())
+
     elif move =="n":
         if player.current_room.n_to is not None:
             player.current_room = player.current_room.n_to

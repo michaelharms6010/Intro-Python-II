@@ -6,12 +6,37 @@ class Player:
         self.current_room = starting_room
         self.inventory = []
     def take(self, item):
-        print(item)
         for i in self.current_room.items_in_room:
-            print(i.name)
-            print(item)
             if item == i.name:
                 self.inventory.append(i)
                 self.current_room.items_in_room.remove(i)
                 i.on_take()
+                return
         print(f"You don't see {item} here.")
+
+    def drop(self, item):
+        for i in self.inventory:
+            if item == i.name:
+                self.inventory.remove(i)
+                self.current_room.items_in_room.append(i)
+                i.on_drop()
+                return
+        print(f"You don't have a {item}.")
+    
+
+    def getInventory(self):
+        if len(self.inventory) == 0:
+            return "You are carrying nothing"
+        output = "You are carrying a "
+        if len(self.inventory) == 1:
+            output += self.inventory[0].name
+            return output
+        else: 
+            for i in self.inventory:
+                if i == self.inventory[-1]:
+                    output += "and a " + i.name
+                    if len(self.inventory) == 2:
+                        
+                        output = output.replace(",","")
+                    return output 
+                output += i.name + ", "
