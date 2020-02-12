@@ -6,7 +6,7 @@ import random
 
 room = {
     'outside':  Room("Outside Cave Entrance",
-                     "North of you, the cave mount beckons", [Item("Butterfly", "A friendly companion"), Item("Tribal Drum", "A tribal drum"), Item("Helm of the Dominator", "A powerful helmet that gives the ability to control minds")]),
+                     "North of you, the cave mount beckons", [Item("butterfly", "A friendly companion"), Item("tribal drum", "covered in etchings and inscriptions in an unknown language"), Item("Helm of the Dominator", "A powerful helmet that gives the ability to control minds")]),
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
 passages run north and east.""", []),
@@ -21,7 +21,7 @@ to north. The smell of gold permeates the air.""", []),
     'treasure': Room("Treasure Chamber", """You've found the long-lost treasure
 chamber! Sadly, it has already been completely emptied by
 earlier adventurers. The only exit is to the south.""", [Item("Holy Locket", "A healing charm")]),
-    'mirrors':    Room("Hall of Mirrors", """Thousands of mirrors surround you. You instantly lose your bearings You have no sense of direction.""", []),
+    'mirrors':    Room("Hall of Mirrors", """Thousands of mirrors surround you. You instantly lose your bearings. You do not remember from which way you entered.""", []),
 }
 
 
@@ -58,12 +58,14 @@ By your great wisdom, you have won the game.""")
 
     if player.current_room == room["mirrors"]:
         if player.hasItem("Holy Locket"):
+            player.current_room.description = "Thousands of mirrors surround you. You can easily see where they begin and end."
             print("The Holy Locket has blessed you with acute sight! The illusions of the mirrors have no effect on you.")
             room["mirrors"].s_to= room["foyer"]
             room["mirrors"].n_to= room["overlook"]
             room["mirrors"].e_to= room["treasure"]
             room["mirrors"].w_to= None
         else:
+            player.current_room.description = """Thousands of mirrors surround you. You instantly lose your bearings. You do not remember from which way you entered."""
             room["mirrors"].s_to= room[random.choice(mirror_exits)]
             room["mirrors"].n_to= room[random.choice(mirror_exits)]
             room["mirrors"].e_to= room[random.choice(mirror_exits)]

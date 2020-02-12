@@ -8,12 +8,12 @@ class Player:
 
     def hasItem(self, item):
         for i in self.inventory:
-            if i.name == item:
+            if i.name.lower() == item.lower():
                 return True
         return False
     def take(self, item):
         for i in self.current_room.items_in_room:
-            if item == i.name:
+            if item.lower() == i.name.lower():
                 self.inventory.append(i)
                 self.current_room.items_in_room.remove(i)
                 i.on_take()
@@ -22,7 +22,7 @@ class Player:
 
     def drop(self, item):
         for i in self.inventory:
-            if item == i.name:
+            if item.lower() == i.name.lower():
                 self.inventory.remove(i)
                 self.current_room.items_in_room.append(i)
                 i.on_drop()

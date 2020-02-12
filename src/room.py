@@ -13,7 +13,7 @@ class Room:
 
     def hasItem(self, item):
         for i in self.items_in_room:
-            if i.name == item:
+            if i.name.lower() == item.lower():
                 return True
         return False
 
@@ -30,8 +30,8 @@ class Room:
                     output += "and a " + i.name
                     if len(self.items_in_room) == 2:
                         output = output.replace(",","")
-                    return output 
-                output += i.name + ", a "
+                    return output
+                output += i.name + ", "
                 
             
 
